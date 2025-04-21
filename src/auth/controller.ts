@@ -2,7 +2,7 @@ import express from "express";
 import { registerUser, loginUser } from "./auth.service";
 
 const router = express.Router();
-
+console.log(router, "router");
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
   try {

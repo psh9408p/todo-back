@@ -5,9 +5,12 @@ export function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): void {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: "No token" });
+  if (!authHeader) {
+    res.status(401).json({ message: "No token" });
+    return;
+  }
 
   const token = authHeader.split(" ")[1];
   try {
@@ -18,6 +21,7 @@ export function authMiddleware(
     req.user = payload;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    res.status(401).json({ message: "Invalid token" });
+    return;
   }
 }

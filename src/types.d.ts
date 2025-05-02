@@ -1,6 +1,9 @@
 // src/types.d.ts
 declare namespace Express {
   export interface Request {
-    user?: any;
+    user?: {
+      email: string;
+      [key: string]: any;
+    };
   }
 }

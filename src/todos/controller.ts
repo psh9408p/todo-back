@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction, Router } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { Request, Response, Router } from "express";
+import { authMiddleware } from "../middleware/auth.middleware";
 import {
   createTodo,
   getUserTodos,
@@ -118,30 +118,5 @@ router.patch("/:id/toggle", authMiddleware, (req: Request, res: Response) => {
 
   res.json(updatedTodo);
 });
-
-export function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    res.status(401).json({ message: "No token" });
-    return;
-  }
-
-  const token = authHeader.split(" ")[1];
-  try {
-    const payload = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "default"
-    ) as JwtPayload & { email: string };
-    req.user = payload;
-    next();
-  } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
-    return;
-  }
-}
 
 export default router;
